@@ -40,9 +40,8 @@ public class ComparablePorAtraccionPreferida implements Comparator<Producto> {
 			if (o1.tipo == atraccionPreferida) {
 				return -1;
 			}
-			return 1;
 		}
-		return 0;// sin esta línea me daba error...¿?
+		return 1;
 
 	}
 
