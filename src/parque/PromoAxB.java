@@ -10,11 +10,10 @@ public class PromoAxB extends Promocion {
 		super();
 	}
 
-	public PromoAxB(TipoDeAtraccion tipo, String nombre, double costoDeVisita, double tiempoNecesario,
-			int cupoPersonasPorDia, List<Atraccion> atraccionesIncluidas) {
-		super(tipo, nombre, costoDeVisita, tiempoNecesario, cupoPersonasPorDia, atraccionesIncluidas);
+	public PromoAxB(TipoDeAtraccion tipo, String nombre, List<Atraccion> atraccionesIncluidas) {
+		super(tipo, nombre, atraccionesIncluidas);
 	}
-
+	
 	@Override
 	public double getCosto() {
 		return this.costo;

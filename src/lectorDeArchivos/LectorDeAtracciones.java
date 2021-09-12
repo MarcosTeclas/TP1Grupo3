@@ -10,7 +10,7 @@ import java.util.List;
 import parque.Atraccion;
 import parque.TipoDeAtraccion;
 
-public class LectoeDeAtracciones {
+public class LectorDeAtracciones {
 
 	// lee un archivo csv y me devuelve una lista de atracciones
 	public List<Atraccion> leerAtraccion(String archivo) {
@@ -80,8 +80,8 @@ public class LectoeDeAtracciones {
 
 	public static void main(String[] args) {
 
-		LectoeDeAtracciones atra = new LectoeDeAtracciones();
+		LectorDeAtracciones atrac = new LectorDeAtracciones();
 
-		atra.leerAtraccion("archivos/attracciones.csv");
+		atrac.leerAtraccion("archivos/atracciones.csv");
 	}
 }

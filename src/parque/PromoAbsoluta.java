@@ -2,19 +2,15 @@ package parque;
 
 import java.util.List;
 
-public class PromoAbsoluta extends Promocion {
-	
-	//falta aplicarle el descuento / ya lo puse pero esta bien?
-	private double descuento;
+public class PromoAbsoluta extends Promocion {  <
 
+	//falta aplicarle el descuento
+	
 	public PromoAbsoluta() {
 		super();
 	}
-
-	public PromoAbsoluta(TipoDeAtraccion tipo, String nombre, double costoDeVisita, double tiempoNecesario,
-			int cupoPersonasPorDia, List<Atraccion> atraccionesIncluidas,double descuento) {
-		super(tipo, nombre, costoDeVisita, tiempoNecesario, cupoPersonasPorDia, atraccionesIncluidas);
-		this.descuento=descuento;
+  public PromoAbsoluta(String nombre, TipoDeAtraccion tipo, int costo, List<Atraccion> atraccionesIncluidas) {
+		super(nombre, tipo, costo, atraccionesIncluidas);
 	}
 
 	@Override

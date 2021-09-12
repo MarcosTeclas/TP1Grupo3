@@ -11,6 +11,7 @@ public class Atraccion extends Producto{
 	public Atraccion(String nombre, double costo,double tiempoNecesario, int cupoPersonas, TipoDeAtraccion tipo) {
 		super(nombre, costo, tiempoNecesario, cupoPersonas, tipo);
 	}
+	
 
 	public boolean quedaCupo() {
 		return this.cupoPersonas>0;
