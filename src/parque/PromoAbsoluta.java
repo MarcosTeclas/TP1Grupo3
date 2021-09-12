@@ -3,9 +3,9 @@ package parque;
 import java.util.List;
 
 public class PromoAbsoluta extends Promocion {
-	
-	//falta aplicarle el descuento
-	
+
+	// falta aplicarle el descuento
+
 	public PromoAbsoluta() {
 		super();
 	}
@@ -22,7 +22,7 @@ public class PromoAbsoluta extends Promocion {
 	@Override
 	public double getTiempoNecesario() {
 		double tiempo = 0;
-		for (Atraccion atrac : atraccionesIncluidas){
+		for (Atraccion atrac : atraccionesIncluidas) {
 			tiempo += atrac.getTiempoNecesario();
 		}
 		return tiempo;
