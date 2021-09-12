@@ -44,6 +44,14 @@ public class Atraccion extends Producto{
 		return this.tiempoNecesario;
 	}
 
+	@Override
+	public void restarCupo() {
+		this.cupoPersonas--;
+		
+	}
+	
+	
+
 	
 
 }

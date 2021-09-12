@@ -6,9 +6,6 @@ public class ComparablePorAtraccionPreferida implements Comparator<Producto> {
 
 	private TipoDeAtraccion atraccionPreferida;
 
-	public ComparablePorAtraccionPreferida() {
-	}
-
 	public ComparablePorAtraccionPreferida(TipoDeAtraccion atraccionPreferida) {
 		this.atraccionPreferida = atraccionPreferida;
 	}

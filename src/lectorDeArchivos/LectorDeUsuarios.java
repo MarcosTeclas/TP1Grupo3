@@ -13,7 +13,7 @@ import parque.Usuario;
 //lee un archivo csv y me devuelve una lista de usuarios
 public class LectorDeUsuarios {
 	public List<Usuario> leerUsuario(String archivo) {
-		
+
 		List<Usuario> users = new LinkedList<Usuario>();
 		FileReader fr = null;
 		BufferedReader br = null;
@@ -22,16 +22,14 @@ public class LectorDeUsuarios {
 		try {
 			fr = new FileReader(archivo);
 			br = new BufferedReader(fr);
-			linea = br.readLine();
 
-			while (linea != null) {
+			while ((linea = br.readLine()) != null) {
 				try {
 					users.add(crearUsuario(linea));
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
-				System.out.println(linea);
-				linea = br.readLine();
+
 			}
 		}
 
@@ -67,7 +65,7 @@ public class LectorDeUsuarios {
 		}
 
 		catch (NumberFormatException e) {
-			throw new UsuarioException("No es un numero");
+			throw new UsuarioException("No es un numero valido para crear un usuario");
 		}
 
 		catch (Exception e) {
@@ -76,13 +74,6 @@ public class LectorDeUsuarios {
 
 		return usuario;
 
-	}
-
-	public static void main(String[] args) {
-
-		LectorDeUsuarios lee = new LectorDeUsuarios();
-
-		lee.leerUsuario("archivos/usuario.csv");
 	}
 
 }
