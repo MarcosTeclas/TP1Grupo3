@@ -50,6 +50,7 @@ public class Usuario {
 			this.dinero -= producto.getCosto();
 			this.tiempo -= producto.getTiempoNecesario();
 			this.itinerario.add(producto);
+			producto.cupoPersonas--;
 		}
 	}
 

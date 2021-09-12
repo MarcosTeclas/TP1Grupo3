@@ -1,6 +1,6 @@
 package parque;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Promocion extends Producto {
@@ -11,11 +11,19 @@ public abstract class Promocion extends Producto {
 		super();
 	}
 
-	public Promocion(TipoDeAtraccion tipo, String nombre, double costoDeVisita, double tiempoNecesario,
-			int cupoPersonasPorDia, List<Atraccion> atraccionesIncluidas) {
-		super(nombre, costoDeVisita, tiempoNecesario, cupoPersonasPorDia,tipo);
-		atraccionesIncluidas = new LinkedList<Atraccion>();
+	//constructor promo porcentual
+	public Promocion(TipoDeAtraccion tipo, String nombre, List<Atraccion> atraccionesIncluidas) {
+		super(nombre, tipo);
+		this.atraccionesIncluidas = new ArrayList<Atraccion>();
 	}
+	
+	//constructor para promo absoluta
+	public Promocion(String nombre, TipoDeAtraccion tipo, int costo, List<Atraccion> atraccionesIncluidas) {
+		super(nombre, tipo, costo);
+		this.atraccionesIncluidas = new ArrayList<Atraccion>();
+	}
+	
+
 
 	@Override
 	public boolean esPromo() {

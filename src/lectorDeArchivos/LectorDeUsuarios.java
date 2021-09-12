@@ -13,6 +13,7 @@ import parque.Usuario;
 //lee un archivo csv y me devuelve una lista de usuarios
 public class LectorDeUsuarios {
 	public List<Usuario> leerUsuario(String archivo) {
+		
 		List<Usuario> users = new LinkedList<Usuario>();
 		FileReader fr = null;
 		BufferedReader br = null;
