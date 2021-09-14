@@ -70,6 +70,8 @@ public abstract class Producto {
 			return false;
 		return true;
 	}
+	
+	public abstract void restarCupo();
 
 	
 }

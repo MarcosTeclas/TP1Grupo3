@@ -21,8 +21,8 @@ public class LectorDeAtracciones {
 		try {
 			fr = new FileReader(archivo);
 			br = new BufferedReader(fr);
-			linea = br.readLine();
-			while (linea != null) {
+			
+			while ((linea = br.readLine())!= null) {
 
 				try {
 					juegos.add(crearAtraccion(linea));
@@ -30,8 +30,7 @@ public class LectorDeAtracciones {
 					System.out.println(e.getMessage());
 				}
 
-				System.out.println(linea);
-				linea = br.readLine();
+				
 			}
 		}
 
@@ -58,30 +57,18 @@ public class LectorDeAtracciones {
 			throw new AtraccionException("cantidad de datos incorrectos");
 		}
 
-		try
-		{
-			atraccion = new Atraccion(datos[0], Double.parseDouble(datos[1]),
-					Double.parseDouble(datos[2]),Integer.parseInt(datos[3]),
-					TipoDeAtraccion.valueOf(datos[4].toUpperCase()));
+		try {
+			atraccion = new Atraccion(datos[0], Double.parseDouble(datos[1]), Double.parseDouble(datos[2]),
+					Integer.parseInt(datos[3]), TipoDeAtraccion.valueOf(datos[4].toUpperCase()));
 
-		}
-		catch(NumberFormatException e) 
-		{
-			throw new AtraccionException("No es un numero");
-		}
-		catch(Exception e) 
-		{
+		} catch (NumberFormatException e) {
+			throw new AtraccionException("No es un numero validos para crear atracciones"+linea);
+		} catch (Exception e) {
 			throw new AtraccionException("No es un enumerado");
 		}
-		
+
 		return atraccion;
 
 	}
 
-	public static void main(String[] args) {
-
-		LectorDeAtracciones atrac = new LectorDeAtracciones();
-
-		atrac.leerAtraccion("archivos/atracciones.csv");
-	}
 }

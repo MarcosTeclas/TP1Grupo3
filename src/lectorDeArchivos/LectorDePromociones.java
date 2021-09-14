@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,11 +17,8 @@ import parque.TipoDeAtraccion;
 
 public class LectorDePromociones {
 
-	LectorDeAtracciones atrac = new LectorDeAtracciones();
-	List<Atraccion> atraccionesEnElParque = atrac.leerAtraccion("archivos/atracciones.csv");
-
 	// lee un archivo csv y me devuelve una lista de atracciones
-	public List<Promocion> leerPromocion(String archivo) {
+	public List<Promocion> leerPromocion(String archivo, List<Atraccion> atraccionesEnElParque) {
 
 		List<Promocion> promos = new LinkedList<Promocion>();
 		FileReader fr = null;
@@ -30,17 +28,15 @@ public class LectorDePromociones {
 		try {
 			fr = new FileReader(archivo);
 			br = new BufferedReader(fr);
-			linea = br.readLine();
-			while (linea != null) {
+
+			while ((linea = br.readLine()) != null) {
 
 				try {
-					promos.add(crearPromo(linea));
+					promos.add(crearPromo(linea, atraccionesEnElParque));
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
 
-				System.out.println(linea);
-				linea = br.readLine();
 			}
 		}
 
@@ -60,43 +56,37 @@ public class LectorDePromociones {
 		return promos;
 	}
 
-	private Promocion crearPromo(String linea) throws PromocionException {
+	private Promocion crearPromo(String linea, List<Atraccion> atraccionesEnElParque) throws PromocionException {
 		Promocion promo = null;
 		String[] datos = linea.split(",");
-		if (datos.length != 5) {
-			throw new PromocionException("cantidad de datos incorrectos");
-		}
 
 		try {
 			if (datos[0].equals("Porcentual")) {
-				String[] atracciones = new String[datos.length-4];
+				String[] atracciones = new String[datos.length - 4];
 				int cont = 0;
 				for (int i = 4; i < datos.length; i++) {
 					atracciones[cont] = datos[i];
 					cont++;
 				}
-				List<Atraccion> atraccionesIncluidas = getAtraccionesIncluidas(atracciones);
 
-				
-				promo = new PromoPorcentual(datos[1],TipoDeAtraccion.valueOf(datos[2].toUpperCase()), 
+				List<Atraccion> atraccionesIncluidas = getAtraccionesIncluidas(atracciones, atraccionesEnElParque);
+				promo = new PromoPorcentual(datos[1], TipoDeAtraccion.valueOf(datos[2].toUpperCase()),
 						Integer.parseInt(datos[3]), atraccionesIncluidas);
-			
-			}else if (datos[0].equals("Absoluta")) {
-				String[] atracciones = new String[datos.length-4];
+
+			} else if (datos[0].equals("Absoluta")) {
+				String[] atracciones = new String[datos.length - 4];
 				int cont = 0;
 				for (int i = 4; i < datos.length; i++) {
 					atracciones[cont] = datos[i];
 					cont++;
 				}
-				List<Atraccion> atraccionesIncluidas = getAtraccionesIncluidas(atracciones);
 
-				
-				promo = new PromoAbsoluta(datos[1],TipoDeAtraccion.valueOf(datos[2].toUpperCase()), 
+				List<Atraccion> atraccionesIncluidas = getAtraccionesIncluidas(atracciones, atraccionesEnElParque);
+
+				promo = new PromoAbsoluta(datos[1], TipoDeAtraccion.valueOf(datos[2].toUpperCase()),
 						Integer.parseInt(datos[3]), atraccionesIncluidas);
-				
-				
-				
-				//falta promo AxB
+
+				// falta promo AxB
 			}
 		} catch (NumberFormatException e) {
 			throw new PromocionException("No es un numero");
@@ -108,22 +98,17 @@ public class LectorDePromociones {
 
 	}
 
-	private List<Atraccion> getAtraccionesIncluidas(String[] atracciones) {
+	private List<Atraccion> getAtraccionesIncluidas(String[] atracciones, List<Atraccion> atraccionesEnElParque) {
 		List<Atraccion> atraccionesIncluidas = new ArrayList<Atraccion>();
 		for (String atraccion : atracciones) {
-//			for (Atraccion atraccionExiste : atraccionesEnElParque) {
-			if (atraccionesEnElParque.contains(atraccion)) {
-				int indice = atraccionesEnElParque.indexOf(atraccion);
-				atraccionesIncluidas.add(atraccionesEnElParque.get(indice));
+			for (Atraccion atraccionExiste : atraccionesEnElParque) {
+				if (atraccionExiste.getNombre().equals(atraccion)) {
+
+					atraccionesIncluidas.add(atraccionExiste);
+				}
 			}
 		}
 		return atraccionesIncluidas;
 	}
 
-	public static void main(String[] args) {
-
-		LectorDePromociones atra = new LectorDePromociones();
-
-		atra.leerPromocion("archivos/atracciones.csv");
-	}
 }
