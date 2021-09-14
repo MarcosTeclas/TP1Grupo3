@@ -19,5 +19,4 @@ public class PromoAbsoluta extends Promocion {
 	public double getCosto() {
 		return this.costo;
 	}
-
 }
