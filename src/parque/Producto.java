@@ -1,6 +1,7 @@
 package parque;
 
 public abstract class Producto {
+
 	protected String nombre;
 	protected double costo;
 	protected double tiempoNecesario;
@@ -35,17 +36,21 @@ public abstract class Producto {
 	public abstract boolean esPromo();		
 	public abstract double getCosto();
 	public abstract double getTiempoNecesario();
+	public abstract void restarCupo();
 	
 	public String getNombre() {
 		return nombre;
 	}
+	
+	public boolean hayCupo() {
+		return this.cupoPersonas > 0;
+	}
 
 	@Override
 	public String toString() {
-		return "Producto [nombre=" + nombre + ", costoDeVisita=" + costo + ", tiempoNecesario="
-				+ tiempoNecesario + ", CupoPersonasPorDia=" + cupoPersonas + ", tipo=" + tipo + "]";
+		return "Nombre: " + nombre + ", costo: " + costo + ", tiempo necesario: "
+				+ tiempoNecesario + ", cupo de personas: " + cupoPersonas + ", tipo: " + tipo;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -55,23 +60,11 @@ public abstract class Producto {
 		if (getClass() != obj.getClass())
 			return false;
 		Producto other = (Producto) obj;
-		if (Double.doubleToLongBits(costo) != Double.doubleToLongBits(other.costo))
-			return false;
-		if (cupoPersonas != other.cupoPersonas)
-			return false;
 		if (nombre == null) {
 			if (other.nombre != null)
 				return false;
 		} else if (!nombre.equals(other.nombre))
 			return false;
-		if (Double.doubleToLongBits(tiempoNecesario) != Double.doubleToLongBits(other.tiempoNecesario))
-			return false;
-		if (tipo != other.tipo)
-			return false;
 		return true;
-	}
-	
-	public abstract void restarCupo();
-
-	
+	}	
 }

@@ -5,16 +5,14 @@ import java.util.ListIterator;
 
 public class PromoAxB extends Promocion {
 
-	// falta aplicarle el descuento
-
 	public PromoAxB() {
 		super();
 	}
 
-	public PromoAxB(TipoDeAtraccion tipo, String nombre, List<Atraccion> atraccionesIncluidas) {
+	public PromoAxB(String nombre, TipoDeAtraccion tipo, List<Atraccion> atraccionesIncluidas) {
 		super(tipo, nombre, atraccionesIncluidas);
 		this.costo = getCosto();
-		this.tiempoNecesario=super.getTiempoNecesario();
+		this.tiempoNecesario = super.getTiempoNecesario();
 	}
 
 	@Override

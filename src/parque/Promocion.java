@@ -1,6 +1,5 @@
 package parque;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Promocion extends Producto {
@@ -41,14 +40,25 @@ public abstract class Promocion extends Producto {
 
 	@Override
 	public String toString() {
-		return "Producto [nombre=" + nombre + ", costoDeVisita=" + costo + ", tiempoNecesario="
-				+ tiempoNecesario + ", "+ "tipo=" + tipo + "]";
+		return "PROMO: " + nombre + ", costo: " + costo + ", tiempo necesario: "
+				+ tiempoNecesario + ", tipo: " + tipo + ", atracciones: " + atraccionesIncluidas;
 	}
 	
-	// arreglar metodo
 	public void restarCupo() {
-		this.cupoPersonas--;
-		
+		for (Atraccion atrac : atraccionesIncluidas){
+			atrac.cupoPersonas--;
+		}		
+	}
+	
+	@Override
+	public boolean hayCupo() {
+		int cantAtraccionesConCupo = 0;
+		for (Atraccion atrac : atraccionesIncluidas){
+			if (atrac.quedaCupo()) {
+				cantAtraccionesConCupo++;
+			}			
+		}
+		return cantAtraccionesConCupo == atraccionesIncluidas.size();
 	}
 	
 

@@ -30,8 +30,8 @@ public class Atraccion extends Producto{
 	
 	@Override
 	public String toString() {
-		return "Atraccion [nombre=" + nombre + ", costo=" + costo + ", tiempo necesario=" + tiempoNecesario
-				+ ", cupo de Personas=" + cupoPersonas + ", tipo de Atracción=" + tipo + "]";
+		return "Atraccion: " + nombre + ", costo: " + costo + ", tiempo necesario: " + tiempoNecesario
+				+ ", tipo de Atracción=" + tipo;
 	}
 
 	@Override
@@ -49,6 +49,7 @@ public class Atraccion extends Producto{
 		this.cupoPersonas--;
 		
 	}
+
 	
 	
 
