@@ -5,12 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import parque.Atraccion;
 import parque.PromoAbsoluta;
+import parque.PromoAxB;
 import parque.PromoPorcentual;
 import parque.Promocion;
 import parque.TipoDeAtraccion;
@@ -20,7 +19,7 @@ public class LectorDePromociones {
 	// lee un archivo csv y me devuelve una lista de atracciones
 	public List<Promocion> leerPromocion(String archivo, List<Atraccion> atraccionesEnElParque) {
 
-		List<Promocion> promos = new LinkedList<Promocion>();
+		List<Promocion> promos = new ArrayList<Promocion>();
 		FileReader fr = null;
 		BufferedReader br = null;
 		String linea = null;
@@ -85,8 +84,17 @@ public class LectorDePromociones {
 
 				promo = new PromoAbsoluta(datos[1], TipoDeAtraccion.valueOf(datos[2].toUpperCase()),
 						Integer.parseInt(datos[3]), atraccionesIncluidas);
+			}  else if (datos[0].equals("AxB")) {
+				String[] atracciones = new String[datos.length - 3];
+				int cont = 0;
+				for (int i = 3; i < datos.length; i++) {
+					atracciones[cont] = datos[i];
+					cont++;
+				}
 
-				// falta promo AxB
+				List<Atraccion> atraccionesIncluidas = getAtraccionesIncluidas(atracciones, atraccionesEnElParque);
+
+				promo = new PromoAxB(datos[1], TipoDeAtraccion.valueOf(datos[2].toUpperCase()), atraccionesIncluidas);
 			}
 		} catch (NumberFormatException e) {
 			throw new PromocionException("No es un numero");
@@ -101,10 +109,10 @@ public class LectorDePromociones {
 	private List<Atraccion> getAtraccionesIncluidas(String[] atracciones, List<Atraccion> atraccionesEnElParque) {
 		List<Atraccion> atraccionesIncluidas = new ArrayList<Atraccion>();
 		for (String atraccion : atracciones) {
-			for (Atraccion atraccionExiste : atraccionesEnElParque) {
-				if (atraccionExiste.getNombre().equals(atraccion)) {
+			for (Atraccion atraccionExistente : atraccionesEnElParque) {
+				if (atraccionExistente.getNombre().equals(atraccion)) {
 
-					atraccionesIncluidas.add(atraccionExiste);
+					atraccionesIncluidas.add(atraccionExistente);
 				}
 			}
 		}

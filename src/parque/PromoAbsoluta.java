@@ -4,8 +4,6 @@ import java.util.List;
 
 public class PromoAbsoluta extends Promocion {
 
-	// falta aplicarle el descuento
-
 	public PromoAbsoluta() {
 		super();
 	}
@@ -19,4 +17,5 @@ public class PromoAbsoluta extends Promocion {
 	public double getCosto() {
 		return this.costo;
 	}
+
 }
