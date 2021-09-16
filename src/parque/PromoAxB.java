@@ -25,4 +25,21 @@ public class PromoAxB extends Promocion {
 		return costo;
 	}
 
+	@Override
+	public String promocionesIncluidas() {
+		String resultado = "";
+		ListIterator<Atraccion> itr = atraccionesIncluidas.listIterator(1);
+		while (itr.hasNext()) {
+			resultado += itr.next().getNombre() + " ";
+		}
+		resultado += "atracción gratuita: " + atraccionesIncluidas.get(0).getNombre();
+		return resultado;
+	}
+
+	@Override
+	public String toString() {
+		return "PROMO: " + nombre + ", costo: " + costo + ", tiempo necesario: " + tiempoNecesario + ", tipo: " + tipo
+				+ ", atracciones Incluidas: " + promocionesIncluidas();
+	}
+
 }

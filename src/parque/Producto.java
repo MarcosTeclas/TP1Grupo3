@@ -37,6 +37,8 @@ public abstract class Producto {
 	public abstract double getCosto();
 	public abstract double getTiempoNecesario();
 	public abstract void restarCupo();
+	public abstract String convertirParaMostrarArchivo();
+	public abstract boolean contiene(Producto producto);
 	
 	public String getNombre() {
 		return nombre;
@@ -45,7 +47,7 @@ public abstract class Producto {
 	public boolean hayCupo() {
 		return this.cupoPersonas > 0;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Nombre: " + nombre + ", costo: " + costo + ", tiempo necesario: "

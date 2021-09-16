@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import lectorDeArchivos.EscrituraDeArchivo;
 import lectorDeArchivos.LectorDeAtracciones;
 import lectorDeArchivos.LectorDePromociones;
 import lectorDeArchivos.LectorDeUsuarios;
@@ -30,26 +31,31 @@ public class Parque {
 
 		try (Scanner entrada = new Scanner(System.in)) {
 			String confirmacion;
+			EscrituraDeArchivo escritura = new EscrituraDeArchivo();
 
 			for (Usuario usuario : usuarios) {
-				productos.sort(new ComparablePorAtraccionPreferida(usuario.getAtraccionPreferida()));
-
+				System.out.println("Bienvenido " + usuario.getNombre());
+				productos.sort(new ComparablePorAtraccionPreferida(usuario.getAtraccionPreferida()));				
 				for (Producto producto : productos) {
-					System.out.println(producto);
-					System.out.print("SI = S o NO = N");
-					confirmacion = entrada.next();
-					while (!confirmacion.equals("s") && !confirmacion.equals("S") && !confirmacion.equals("n") && !confirmacion.equals("N")){
-						System.out.println("SI = S o NO = N");
-						confirmacion = entrada.next();
-					}
-					if ((confirmacion.equals("s") || confirmacion.equals("S")) && usuario.puedeComprarProducto(producto)) {
-						usuario.comprarProducto(producto);
+					if (usuario.puedeComprarProducto(producto)) {
+						System.out.println(producto);
+						System.out.println("SI = S o NO = N ");
+						confirmacion = entrada.nextLine().toUpperCase();
+						while (!confirmacion.equals("S") && !confirmacion.equals("N")) {
+							System.out.println("SI = S o NO = N ");
+							confirmacion = entrada.nextLine();
+						}
+						
+						if (confirmacion.equals("S")) {
+							usuario.comprarProducto(producto);
+						}
 					}
 				}
 				System.out.println(usuario.getItinerario());
+				escritura.escribirItinerario(usuario, usuario.getItinerario());
 			}
+
 		}
-		
 
 	}
 

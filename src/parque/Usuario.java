@@ -1,24 +1,19 @@
 package parque;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Usuario {
-	
+
 	public List<Producto> getItinerario() {
 		return itinerario;
 	}
 
 	private String nombre;
 	private TipoDeAtraccion preferida;
-	private double dinero, tiempo;
+	private double dinero, tiempo, dineroTotal, tiempoTotal;
 	private List<Producto> itinerario;
-	
-	
-
-	// constructor de usuario
-	public Usuario() {
-	}
 
 	public Usuario(String nombre, TipoDeAtraccion preferencia, double dinero, double tiempo) {
 		if (validaNumeros(dinero)) {
@@ -35,6 +30,18 @@ public class Usuario {
 		this.nombre = nombre;
 		this.preferida = preferencia;
 		itinerario = new ArrayList<Producto>();
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public double getDineroTotal() {
+		return dineroTotal;
+	}
+
+	public double getTiempoTotal() {
+		return tiempoTotal;
 	}
 
 	public TipoDeAtraccion getAtraccionPreferida() {
@@ -59,20 +66,23 @@ public class Usuario {
 
 	public void comprarProducto(Producto producto) {
 		this.dinero -= producto.getCosto();
+		this.dineroTotal += producto.getCosto();
 		this.tiempo -= producto.getTiempoNecesario();
+		this.tiempoTotal += producto.getTiempoNecesario();
 		this.itinerario.add(producto);
 		producto.restarCupo();
 	}
 
 	private boolean estaEnElItinerario(Producto producto) {
 		boolean existe = false;
-		for (Producto productoExistente : this.itinerario) {
-			if (productoExistente.equals(producto)) {
-				existe = true;
-			}
+		Iterator<Producto> itr = this.itinerario.iterator();
+		while(!existe && itr.hasNext()) {
+			existe = producto.contiene(itr.next());
 		}
 		return existe;
 	}
+	
+
 
 	@Override
 	public String toString() {
