@@ -11,7 +11,6 @@ public class Atraccion extends Producto{
 	public Atraccion(String nombre, double costo,double tiempoNecesario, int cupoPersonas, TipoDeAtraccion tipo) {
 		super(nombre, costo, tiempoNecesario, cupoPersonas, tipo);
 	}
-	
 
 	public boolean quedaCupo() {
 		return this.cupoPersonas>0;
@@ -48,6 +47,19 @@ public class Atraccion extends Producto{
 	public void restarCupo() {
 		this.cupoPersonas--;
 		
+	}
+
+	@Override
+	public String convertirParaMostrarArchivo() {
+		return "ATRACCIÓN: " + getNombre();
+	}
+
+	@Override
+	public boolean contiene(Producto producto) {
+		if(producto.esPromo()) {
+			return producto.contiene(this);
+		}
+		return this.equals(producto);
 	}
 
 	

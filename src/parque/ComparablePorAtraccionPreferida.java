@@ -12,49 +12,51 @@ public class ComparablePorAtraccionPreferida implements Comparator<Producto> {
 
 	@Override
 	public int compare(Producto o1, Producto o2) {
-
-		boolean sonPreferidasLasDosAtracciones = o1.tipo == atraccionPreferida && o2.tipo == atraccionPreferida;
-		boolean sonPromosLasDosAtracciones = o1.esPromo() && o2.esPromo();
-		boolean tienenElMismoCosto = Double.compare(o1.costo, o2.costo) == 0;
-
-		if (sonPreferidasLasDosAtracciones) {
-			if (sonPromosLasDosAtracciones) {
-				return comparadorPorCosto(o1, o2, tienenElMismoCosto);// comparo por costo y por tiempo
-			} else {
-				return comparadorPorPromos(o1, o2);// y sino comparo por promo
-			}
-		} else if (!sonPreferidasLasDosAtracciones) {
-			if (sonPromosLasDosAtracciones) {
-				return comparadorPorCosto(o1, o2, tienenElMismoCosto);
-			} else if (!sonPromosLasDosAtracciones) {
-				if (tienenElMismoCosto) {
-					return comparadorPorCosto(o1, o2, tienenElMismoCosto);// comparo por costo y por tiempo
+		if (o1.tipo == this.atraccionPreferida && o2.tipo == this.atraccionPreferida) {
+			// ambas son preferidas, compara por lo siguiente (promo)
+			if (o1.esPromo() && o2.esPromo()) {
+				// ambas son promos, compara por costo
+				if (Double.compare(o1.costo, o2.costo) == 0) {
+					// mismo costo, comparo por tiempo finalmente
+					return -Double.compare(o1.tiempoNecesario, o2.tiempoNecesario);
 				} else {
-					return comparadorPorPromos(o1, o2);// y sino comparo por promo
+					return -Double.compare(o1.costo, o2.costo);
 				}
+			} else if (!o1.esPromo() && !o2.esPromo()) {
+				// ninguna es promo, compara por costo
+				if (Double.compare(o1.costo, o2.costo) == 0) {
+					// mismo costo, comparo por tiempo finalmente
+					return -Double.compare(o1.tiempoNecesario, o2.tiempoNecesario);
+				} else {
+					return -Double.compare(o1.costo, o2.costo);
+				}
+			} else {
+				return -Boolean.compare(o1.esPromo(), o2.esPromo());
+			}
+		} else if (o1.tipo != this.atraccionPreferida && o2.tipo != this.atraccionPreferida){
+			if (o1.esPromo() && o2.esPromo()) {
+				// ambas son promos, compara por costo
+				if (Double.compare(o1.costo, o2.costo) == 0) {
+					// mismo costo, comparo por tiempo finalmente
+					return -Double.compare(o1.tiempoNecesario, o2.tiempoNecesario);
+				} else {
+					return -Double.compare(o1.costo, o2.costo);
+				}
+			} else if (!o1.esPromo() && !o2.esPromo()) {
+				// ninguna es promo, compara por costo
+				if (Double.compare(o1.costo, o2.costo) == 0) {
+					// mismo costo, comparo por tiempo finalmente
+					return -Double.compare(o1.tiempoNecesario, o2.tiempoNecesario);
+				} else {
+					return -Double.compare(o1.costo, o2.costo);
+				}
+			} else {
+				return -Boolean.compare(o1.esPromo(), o2.esPromo());
 			}
 		} else {
-			if (o1.tipo == atraccionPreferida) {
-				return -1;
-			}
+			// una es preferida y la otra no
+			if (o1.tipo == this.atraccionPreferida) return -1;
+			return 1;
 		}
-		return 1;
-
-	}
-
-	private int comparadorPorPromos(Producto o1, Producto o2) {
-		return Boolean.compare(o1.esPromo(), o2.esPromo()) * -1;
-	}
-
-	private int comparadorPorCosto(Producto o1, Producto o2, boolean tienenElMismoCosto) {
-		if (tienenElMismoCosto) {
-			return comparadorPorTiempo(o1, o2); // comparo por tiempo
-		} else {
-			return Double.compare(o1.costo, o2.costo) * -1;// y sino comparo por costo
-		}
-	}
-
-	private int comparadorPorTiempo(Producto o1, Producto o2) {
-		return Double.compare(o1.tiempoNecesario, o2.tiempoNecesario) * -1;
 	}
 }
