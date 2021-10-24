@@ -144,17 +144,16 @@ public class PromocionDAOImpl implements GenericDAO<Promocion> {
 					+ "PROMOCIONES.ID = ?";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
-			ResultSet resultados = statement.executeQuery();
 			statement.setInt(1, idPromocion);
-
+			ResultSet resultados = statement.executeQuery();
+			
 			List<Atraccion> atraccionesIncluidas = new ArrayList<Atraccion>();
 			AtraccionDAOImpl atraccionDAO = new AtraccionDAOImpl();
 
 			while (resultados.next()) {
-				Atraccion atraccion = atraccionDAO.findById(idPromocion);
+				Atraccion atraccion = atraccionDAO.findById(resultados.getInt(1));
 				atraccionesIncluidas.add(atraccion);
 			}
-
 			return atraccionesIncluidas;
 		} catch (Exception e) {
 			throw new MissingDataException(e);

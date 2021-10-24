@@ -5,35 +5,24 @@ import java.util.List;
 import java.util.Scanner;
 
 import dao.AtraccionDAOImpl;
+import dao.PromocionDAOImpl;
 import dao.UserDAOImpl;
 import lectorDeArchivos.EscrituraDeArchivo;
-import lectorDeArchivos.LectorDeAtracciones;
-import lectorDeArchivos.LectorDePromociones;
-import lectorDeArchivos.LectorDeUsuarios;
 
 public class Parque {
 
 	public void ejecutar() {
-		List<Producto> productos = new ArrayList<Producto>();
-		//List<Usuario> usuarios = new ArrayList<Usuario>();
-		List<Promocion> promociones = new ArrayList<Promocion>();
-		//List<Atraccion> atracciones = new ArrayList<Atraccion>();
-
-		//LectorDeUsuarios usu = new LectorDeUsuarios();
-		//usuarios = usu.leerUsuario("archivos/usuario.csv");
 		
 		UserDAOImpl userDAO = new UserDAOImpl();
 		List<Usuario> usuarios = userDAO.findAll();
 		
-		//LectorDeAtracciones atraccion = new LectorDeAtracciones();
-		//atracciones = atraccion.leerAtraccion("archivos/atracciones.csv");
-		
 		AtraccionDAOImpl atraccionDAO = new AtraccionDAOImpl();
 		List<Atraccion> atracciones = atraccionDAO.findAll();
+		
+		PromocionDAOImpl promocionDAO = new PromocionDAOImpl();
+		List<Promocion> promociones = promocionDAO.findAll();
 
-		LectorDePromociones promos = new LectorDePromociones();
-		promociones = promos.leerPromocion("archivos/promociones.csv", atracciones);
-
+		List<Producto> productos = new ArrayList<Producto>();
 		productos.addAll(atracciones);
 		productos.addAll(promociones);
 
