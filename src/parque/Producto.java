@@ -2,6 +2,7 @@ package parque;
 
 public abstract class Producto {
 
+	protected int id;
 	protected String nombre;
 	protected double costo;
 	protected double tiempoNecesario;
@@ -33,12 +34,20 @@ public abstract class Producto {
 		this.tipo = tipo;
 	}
 
-	public abstract boolean esPromo();		
+	public abstract boolean esPromo();
 	public abstract double getCosto();
 	public abstract double getTiempoNecesario();
 	public abstract void restarCupo();
 	public abstract String convertirParaMostrarArchivo();
 	public abstract boolean contiene(Producto producto);
+	
+	public TipoDeAtraccion getTipo() {
+		return tipo;
+	}
+	
+	public int getId() {
+		return id;
+	}
 	
 	public String getNombre() {
 		return nombre;
