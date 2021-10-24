@@ -5,11 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Usuario {
-
-	public List<Producto> getItinerario() {
-		return itinerario;
-	}
-
+	
+	private int id;
 	private String nombre;
 	private TipoDeAtraccion preferida;
 	private double dinero, tiempo, dineroTotal, tiempoTotal;
@@ -31,6 +28,10 @@ public class Usuario {
 		this.preferida = preferencia;
 		itinerario = new ArrayList<Producto>();
 	}
+	
+	public int getId() {
+		return id;
+	}
 
 	public String getNombre() {
 		return nombre;
@@ -46,6 +47,10 @@ public class Usuario {
 
 	public TipoDeAtraccion getAtraccionPreferida() {
 		return preferida;
+	}
+
+	public List<Producto> getItinerario() {
+		return itinerario;
 	}
 
 	// Validacion de Doubles positivos

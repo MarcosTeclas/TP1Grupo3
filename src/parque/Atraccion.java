@@ -13,7 +13,7 @@ public class Atraccion extends Producto{
 	}
 
 	public boolean quedaCupo() {
-		return this.cupoPersonas>0;
+		return this.cupoPersonas > 0;
 	}
 	
 	public void ocuparAtraccion() {
@@ -45,8 +45,16 @@ public class Atraccion extends Producto{
 
 	@Override
 	public void restarCupo() {
-		this.cupoPersonas--;
-		
+		this.cupoPersonas--;		
+	}
+	
+	public int getCupo() {
+		return cupoPersonas;
+	}
+	
+	@Override
+	public TipoDeAtraccion getTipo() {
+		return tipo;
 	}
 
 	@Override
@@ -61,6 +69,8 @@ public class Atraccion extends Producto{
 		}
 		return this.equals(producto);
 	}
+
+
 
 	
 	
