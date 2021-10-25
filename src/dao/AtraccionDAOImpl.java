@@ -11,8 +11,7 @@ import jdbc.ConnectionProvider;
 import parque.Atraccion;
 import parque.TipoDeAtraccion;
 
-
-public class AtraccionDAOImpl implements GenericDAO<Atraccion> {
+public class AtraccionDAOImpl implements AtraccionDAO {
 
 	public int insert(Atraccion atraccion) {
 		try {
@@ -122,8 +121,9 @@ public class AtraccionDAOImpl implements GenericDAO<Atraccion> {
 		}
 	}
 
-	private Atraccion toAtraccion(ResultSet resultados) throws SQLException {		
-		return new Atraccion(resultados.getString(2), resultados.getDouble(3),resultados.getDouble(4), resultados.getInt(5), TipoDeAtraccion.valueOf(resultados.getString(6)));
+	private Atraccion toAtraccion(ResultSet resultados) throws SQLException {
+		return new Atraccion(resultados.getString(2), resultados.getDouble(3), resultados.getDouble(4),
+				resultados.getInt(5), TipoDeAtraccion.valueOf(resultados.getString(6)));
 	}
 
 }
