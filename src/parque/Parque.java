@@ -50,6 +50,12 @@ public class Parque {
 				}
 				System.out.println(usuario.getItinerario());
 				escritura.escribirItinerario(usuario, usuario.getItinerario());
+				System.out.println();
+				System.out.println();
+				System.out.println("¡GRACIAS POR PASAR EL DÍA EN NUESTRO PARQUE!");
+				System.out.println();
+				System.out.println();
+				System.out.println("------------------------------------------------");
 			}
 
 		}
