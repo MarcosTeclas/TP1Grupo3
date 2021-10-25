@@ -12,7 +12,7 @@ import jdbc.ConnectionProvider;
 import parque.TipoDeAtraccion;
 import parque.Usuario;
 
-public class UserDAOImpl implements GenericDAO<Usuario> {
+public class UserDAOImpl implements UserDAO {
 
 	public int insert(Usuario usuario) {
 		try {

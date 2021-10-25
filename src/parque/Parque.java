@@ -4,22 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import dao.AtraccionDAOImpl;
-import dao.PromocionDAOImpl;
-import dao.UserDAOImpl;
+import dao.AtraccionDAO;
+import dao.DAOFactory;
+import dao.PromocionDAO;
+import dao.UserDAO;
 import lectorDeArchivos.EscrituraDeArchivo;
 
 public class Parque {
 
 	public void ejecutar() {
-		
-		UserDAOImpl userDAO = new UserDAOImpl();
+
+		UserDAO userDAO = DAOFactory.getUserDAO();
 		List<Usuario> usuarios = userDAO.findAll();
-		
-		AtraccionDAOImpl atraccionDAO = new AtraccionDAOImpl();
+
+		AtraccionDAO atraccionDAO = DAOFactory.getAtraccionDAO();
 		List<Atraccion> atracciones = atraccionDAO.findAll();
-		
-		PromocionDAOImpl promocionDAO = new PromocionDAOImpl();
+
+		PromocionDAO promocionDAO = DAOFactory.getPromocionDAO();
 		List<Promocion> promociones = promocionDAO.findAll();
 
 		List<Producto> productos = new ArrayList<Producto>();
@@ -32,7 +33,7 @@ public class Parque {
 
 			for (Usuario usuario : usuarios) {
 				System.out.println("Bienvenido " + usuario.getNombre());
-				productos.sort(new ComparablePorAtraccionPreferida(usuario.getAtraccionPreferida()));				
+				productos.sort(new ComparablePorAtraccionPreferida(usuario.getAtraccionPreferida()));
 				for (Producto producto : productos) {
 					if (usuario.puedeComprarProducto(producto)) {
 						System.out.println(producto);
@@ -42,7 +43,7 @@ public class Parque {
 							System.out.println("SI = S o NO = N ");
 							confirmacion = entrada.nextLine();
 						}
-						
+
 						if (confirmacion.equals("S")) {
 							usuario.comprarProducto(producto);
 						}

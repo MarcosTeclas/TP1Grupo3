@@ -15,7 +15,7 @@ import parque.PromoPorcentual;
 import parque.Promocion;
 import parque.TipoDeAtraccion;
 
-public class PromocionDAOImpl implements GenericDAO<Promocion> {
+public class PromocionDAOImpl implements PromocionDAO {
 
 	public int insert(Promocion promocion) {
 		try {
