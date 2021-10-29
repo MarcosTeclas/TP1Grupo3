@@ -14,12 +14,14 @@ public abstract class Producto {
 	
 	//constructor promo porcentual
 	public Producto(int id, String nombre, TipoDeAtraccion tipo){
+		this.id = id;
 		this.tipo = tipo;
 		this.nombre = nombre;
 	}
 	
 	//constructor para promo absoluta
 	public Producto(int id, String nombre, TipoDeAtraccion tipo, int costo){
+		this.id = id;
 		this.tipo = tipo;
 		this.nombre = nombre;
 		this.costo = costo;
@@ -27,6 +29,7 @@ public abstract class Producto {
 	
 	//contructor de atracciones
 	public Producto(int id, String nombre, double costo, double tiempoNecesario, int cupoPersonas, TipoDeAtraccion tipo) {
+		this.id = id;
 		this.nombre = nombre;
 		this.costo = costo;
 		this.tiempoNecesario = tiempoNecesario;

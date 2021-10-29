@@ -49,7 +49,7 @@ public class Parque {
 
 						if (confirmacion.equals("S")) {
 							usuario.comprarProducto(producto);
-							itinerario.update(producto, usuario);
+							itinerario.insert(producto, usuario);
 							actualizarProducto(producto);
 						}
 					}

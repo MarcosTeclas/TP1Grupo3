@@ -15,6 +15,8 @@ import parque.Usuario;
 
 public class UserDAOImpl implements UserDAO {
 
+	private List<Producto> itinerario = new ArrayList<Producto>();
+
 	public int insert(Usuario usuario) {
 		try {
 			String sql = "INSERT INTO USUARIOS (NOMBRE, ATRACCION_PREFERIDA, DINERO, TIEMPO) VALUES (?, ?, ?, ?)";
@@ -119,14 +121,21 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 
-	private Usuario toUser(ResultSet resultados) throws SQLException {		
-		List<Producto> itinerario = getProductosComprados(resultados.getInt(1));		
-		Usuario usuario = new Usuario(resultados.getInt(1), resultados.getString(2), 
-				TipoDeAtraccion.valueOf(resultados.getString(3)), resultados.getDouble(4), resultados.getDouble(5), itinerario);
+	private Usuario toUser(ResultSet resultados) throws SQLException {
+		Usuario usuario = new Usuario(resultados.getInt(1), resultados.getString(2),
+				TipoDeAtraccion.valueOf(resultados.getString(3)), resultados.getDouble(4), resultados.getDouble(5),
+				getProductosComprados(resultados.getInt(1)));
 		return usuario;
 	}
 	
-	private List<Producto> getProductosComprados(int idUsuario) {
+	private List<Producto> getProductosComprados (int idUsuario) {
+		getPromocionesCompradas(idUsuario);
+		getAtraccionesCompradas(idUsuario);
+		return itinerario;
+		
+	}
+
+	private List<Producto> getPromocionesCompradas(int idUsuario) {
 		try {
 			String sql = "SELECT PROMOCIONES.ID FROM PROMOCIONES JOIN ITINERARIO_USUARIO ON ITINERARIO_USUARIO.PROMOCION_COMPRADA_ID "
 					+ "= PROMOCIONES.ID WHERE ITINERARIO_USUARIO.USUARIO_ID = ?";
@@ -135,30 +144,35 @@ public class UserDAOImpl implements UserDAO {
 			statement.setInt(1, idUsuario);
 			ResultSet resultados = statement.executeQuery();
 
-			List<Producto> atraccionesIncluidas = new ArrayList<Producto>();
+			
 			PromocionDAOImpl promocionDao = new PromocionDAOImpl();
 
 			while (resultados.next()) {
-				atraccionesIncluidas.add(promocionDao.findById(resultados.getInt(1)));
-			}
-			conn.close();
-			
-			String sql2 = "SELECT ATRACCIONES.ID FROM ATRACCIONES JOIN ITINERARIO_USUARIO ON "
-					+ "ITINERARIO_USUARIO.ATRACCION_COMPRADA_ID = ATRACCIONES.ID WHERE ITINERARIO_USUARIO.USUARIO_ID= ?";
-			Connection conn2 = ConnectionProvider.getConnection();
-			PreparedStatement statement2 = conn2.prepareStatement(sql2);
-			statement2.setInt(1, idUsuario);
-			ResultSet resultados2 = statement2.executeQuery();
-
-			AtraccionDAOImpl atraccionDAO = new AtraccionDAOImpl();
-
-			while (resultados2.next()) {
-				Atraccion atraccion = atraccionDAO.findById(resultados2.getInt(1));
-				atraccionesIncluidas.add(atraccion);
-			}
-			return atraccionesIncluidas;
+				itinerario.add(promocionDao.findById(resultados.getInt(1)));
+			}return itinerario;
 		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
 	}
+
+	private List<Producto> getAtraccionesCompradas(int idUsuario) {
+		try {
+			String sql = "SELECT ATRACCIONES.ID FROM ATRACCIONES JOIN ITINERARIO_USUARIO ON "
+					+ "ITINERARIO_USUARIO.ATRACCION_COMPRADA_ID = ATRACCIONES.ID WHERE ITINERARIO_USUARIO.USUARIO_ID= ?";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, idUsuario);
+			ResultSet resultados = statement.executeQuery();
+
+			AtraccionDAOImpl atraccionDAO = new AtraccionDAOImpl();
+
+			while (resultados.next()) {
+				Atraccion atraccion = atraccionDAO.findById(resultados.getInt(1));
+				itinerario.add(atraccion);
+			}
+			return itinerario;
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
 	}
+}
