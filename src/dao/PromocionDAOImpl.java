@@ -35,25 +35,16 @@ public class PromocionDAOImpl implements PromocionDAO {
 			throw new MissingDataException(e);
 		}
 	}
-
 	public int update(Promocion promocion) {
-		try {
-			String sql = "UPDATE PROMOCIONES SET NOMBRE = ?, TIPO_ATRACCION = ?, COSTO = ?, ATRACCION_GRATUITA = ?, DESCUENTO = ? WHERE ID = ?";
-			Connection conn = ConnectionProvider.getConnection();
-
-			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, promocion.getNombre());
-			statement.setString(2, promocion.getTipo().toString());
-			statement.setDouble(3, promocion.getCosto());
-			// statement.setString(4, promocion.getAtraccionGratuita());
-			// statement.setInt(5, promocion.getDescuento());
-			statement.setInt(6, promocion.getId());
-			int rows = statement.executeUpdate();
-
-			return rows;
-		} catch (Exception e) {
-			throw new MissingDataException(e);
+		
+		List<Atraccion> atraccionesIncluidas = promocion.getAtraccionesIncluidas();
+		int rows = 0;
+		AtraccionDAOImpl atraccionDao = new AtraccionDAOImpl();
+		
+		for (Atraccion atraccion : atraccionesIncluidas) {
+			rows = atraccionDao.update(atraccion);
 		}
+		return rows;
 	}
 
 	public int delete(Promocion promocion) {
@@ -146,7 +137,7 @@ public class PromocionDAOImpl implements PromocionDAO {
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setInt(1, idPromocion);
 			ResultSet resultados = statement.executeQuery();
-			
+
 			List<Atraccion> atraccionesIncluidas = new ArrayList<Atraccion>();
 			AtraccionDAOImpl atraccionDAO = new AtraccionDAOImpl();
 
@@ -161,21 +152,21 @@ public class PromocionDAOImpl implements PromocionDAO {
 	}
 
 	private Promocion toPromoPorcentual(ResultSet resultados) throws SQLException {
-		Promocion promocionPorcentual = new PromoPorcentual(resultados.getString(2),
+		Promocion promocionPorcentual = new PromoPorcentual(resultados.getInt(1), resultados.getString(2),
 				TipoDeAtraccion.valueOf(resultados.getString(3)), resultados.getInt(6), this.atraccionesIncluidas(1));
 		return promocionPorcentual;
 	}
 
 	private Promocion toPromoAbsoluta(ResultSet resultados) throws SQLException {
-		Promocion promocionAbsoluta = new PromoAbsoluta(resultados.getString(2),
+		Promocion promocionAbsoluta = new PromoAbsoluta(resultados.getInt(1), resultados.getString(2),
 				TipoDeAtraccion.valueOf(resultados.getString(3)), resultados.getDouble(4),
 				this.atraccionesIncluidas(2));
 		return promocionAbsoluta;
 	}
 
 	private Promocion toPromoAxB(ResultSet resultados) throws SQLException {
-		Promocion promocionAxB = new PromoAxB(resultados.getString(2), TipoDeAtraccion.valueOf(resultados.getString(3)),
-				this.atraccionesIncluidas(3));
+		Promocion promocionAxB = new PromoAxB(resultados.getInt(1), resultados.getString(2),
+				TipoDeAtraccion.valueOf(resultados.getString(3)), this.atraccionesIncluidas(3));
 		return promocionAxB;
 	}
 

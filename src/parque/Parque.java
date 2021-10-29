@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Scanner;
 
 import dao.AtraccionDAO;
+import dao.AtraccionDAOImpl;
 import dao.DAOFactory;
+import dao.ItinerarioDAOImpl;
 import dao.PromocionDAO;
+import dao.PromocionDAOImpl;
 import dao.UserDAO;
-import lectorDeArchivos.EscrituraDeArchivo;
+import dao.UserDAOImpl;
 
 public class Parque {
 
@@ -29,7 +32,7 @@ public class Parque {
 
 		try (Scanner entrada = new Scanner(System.in)) {
 			String confirmacion;
-			EscrituraDeArchivo escritura = new EscrituraDeArchivo();
+			ItinerarioDAOImpl itinerario = new ItinerarioDAOImpl();
 
 			for (Usuario usuario : usuarios) {
 				System.out.println("Bienvenido " + usuario.getNombre());
@@ -46,15 +49,37 @@ public class Parque {
 
 						if (confirmacion.equals("S")) {
 							usuario.comprarProducto(producto);
+							itinerario.update(producto, usuario);
+							actualizarProducto(producto);
 						}
 					}
+					actualizarUsuario(usuario);
 				}
 				System.out.println(usuario.getItinerario());
-				escritura.escribirItinerario(usuario, usuario.getItinerario());
+				System.out.println();
+				System.out.println();
+				System.out.println("¡GRACIAS POR PASAR EL DÍA EN NUESTRO PARQUE!");
+				System.out.println();
+				System.out.println();
+				System.out.println("------------------------------------------------");
 			}
-
 		}
-
 	}
+	
+	public void actualizarProducto(Producto producto) {
+		if(producto.esPromo()) {
+			PromocionDAOImpl promocionDao = new PromocionDAOImpl();
+			promocionDao.update((Promocion) producto);
+		}else {
+			AtraccionDAOImpl atraccionDao = new AtraccionDAOImpl();
+			atraccionDao.update((Atraccion) producto);
+		}		
+	}
+	
+	public void actualizarUsuario (Usuario usuario) {
+		UserDAOImpl user = new UserDAOImpl();
+		user.update(usuario);
+	}
+	
 
 }

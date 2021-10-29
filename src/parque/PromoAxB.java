@@ -5,8 +5,8 @@ import java.util.ListIterator;
 
 public class PromoAxB extends Promocion {
 
-	public PromoAxB(String nombre, TipoDeAtraccion tipo, List<Atraccion> atraccionesIncluidas) {
-		super(tipo, nombre, atraccionesIncluidas);
+	public PromoAxB(int id, String nombre, TipoDeAtraccion tipo, List<Atraccion> atraccionesIncluidas) {
+		super(id, tipo, nombre, atraccionesIncluidas);
 		this.costo = getCosto();
 		this.tiempoNecesario = super.getTiempoNecesario();
 	}
@@ -22,7 +22,7 @@ public class PromoAxB extends Promocion {
 	}
 
 	@Override
-	public String promocionesIncluidas() {
+	public String stringAtraccionesIncluidas() {
 		String resultado = "";
 		ListIterator<Atraccion> itr = atraccionesIncluidas.listIterator(1);
 		while (itr.hasNext()) {
@@ -31,15 +31,11 @@ public class PromoAxB extends Promocion {
 		resultado += "atracción gratuita: " + atraccionesIncluidas.get(0).getNombre();
 		return resultado;
 	}
-	
-	public String getAtraccionGratuita() {
-		return atraccionesIncluidas.get(0).getNombre();
-	}
 
 	@Override
 	public String toString() {
 		return "PROMO: " + nombre + ", costo: " + costo + ", tiempo necesario: " + tiempoNecesario + ", tipo: " + tipo
-				+ ", atracciones Incluidas: " + promocionesIncluidas();
+				+ ", atracciones Incluidas: " + stringAtraccionesIncluidas();
 	}
 
 }

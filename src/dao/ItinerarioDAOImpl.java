@@ -4,26 +4,31 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import jdbc.ConnectionProvider;
 import parque.Atraccion;
-import parque.TipoDeAtraccion;
+import parque.Producto;
+import parque.Promocion;
+import parque.Usuario;
 
-public class AtraccionDAOImpl implements AtraccionDAO {
+public class ItinerarioDAOImpl implements ItinerarioDAO {
 
-	public int insert(Atraccion atraccion) {
+	public int insert(Producto producto, Usuario usuario) {
 		try {
-			String sql = "INSERT INTO ATRACCIONES (NOMBRE, COSTO, TIEMPO_NECESARIO, CUPO, TIPO_ATRACCION) VALUES (?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO ITINERARIO_USUARIO (USUARIO_ID, ATRACCION_COMPRADA_ID, PROMOCION_COMPRADA_ID)"
+					+ " VALUES (?, ?, ?)";
 			Connection conn = ConnectionProvider.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, atraccion.getNombre());
-			statement.setDouble(2, atraccion.getCosto());
-			statement.setDouble(3, atraccion.getTiempoNecesario());
-			statement.setInt(4, atraccion.getCupo());
-			statement.setString(5, atraccion.getTipo().toString());
+			statement.setInt(1, usuario.getId());
+
+			if (producto.esPromo()) {
+				statement.setInt(3, producto.getId());
+			} else {
+				statement.setInt(2, producto.getId());
+			}
 			int rows = statement.executeUpdate();
 
 			return rows;
@@ -32,14 +37,18 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 		}
 	}
 
-	public int update(Atraccion atraccion) {
+	public int update(Producto producto, Usuario usuario) {
 		try {
-			String sql = "UPDATE ATRACCIONES SET CUPO = ? WHERE ID = ?";
+			String sql = "UPDATE ITINERARIO_USUARIO SET USUARIO_ID = ?, ATRACCION_COMPRADA_ID = ?, PROMOCION_COMPRADA_ID = ?";
 			Connection conn = ConnectionProvider.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setInt(1, atraccion.getCupo());
-			statement.setInt(2, atraccion.getId());
+			statement.setInt(1, usuario.getId());
+			if (producto.esPromo()) {
+				statement.setInt(3, producto.getId());
+			} else {
+				statement.setInt(2, producto.getId());
+			}
 			int rows = statement.executeUpdate();
 
 			return rows;
@@ -48,13 +57,13 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 		}
 	}
 
-	public int delete(Atraccion atraccion) {
+	public int delete(Usuario usuario) {
 		try {
-			String sql = "DELETE FROM ATRACCIONES WHERE ID = ?";
+			String sql = "DELETE FROM ITINERARIO_USUARIO WHERE USUARIO_ID = ?";
 			Connection conn = ConnectionProvider.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setInt(1, atraccion.getId());
+			statement.setInt(1, usuario.getId());
 			int rows = statement.executeUpdate();
 
 			return rows;
@@ -63,9 +72,9 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 		}
 	}
 
-	public Atraccion findById(int id) {
+	/*public Producto findById(int id) {
 		try {
-			String sql = "SELECT * FROM ATRACCIONES WHERE ID = ?";
+			String sql = "SELECT * FROM ITINERARIO_USUARIO WHERE ID = ?";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setInt(1, id);
@@ -81,13 +90,14 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
-	}
+	}*/
 
-	public int countAll() {
+	public int countAllOfUser(int id) {
 		try {
-			String sql = "SELECT COUNT(1) AS TOTAL FROM ATRACCIONES";
+			String sql = "SELECT COUNT(1) AS TOTAL FROM ITINERARIO_USUARIO WHERE USUARIO_ID = ?";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, id);
 			ResultSet resultados = statement.executeQuery();
 
 			resultados.next();
@@ -99,27 +109,36 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 		}
 	}
 
-	public List<Atraccion> findAll() {
+	public List<Producto> findAllOfUser(int id) {
 		try {
-			String sql = "SELECT * FROM ATRACCIONES";
+			String sql = "SELECT * FROM ITINERARIO_USUARIO WHERE USUARIO_ID = ?";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, id);
 			ResultSet resultados = statement.executeQuery();
 
-			List<Atraccion> atracciones = new LinkedList<Atraccion>();
+			List<Producto> productos = new ArrayList<Producto>();
 			while (resultados.next()) {
-				atracciones.add(toAtraccion(resultados));
+				if (resultados.getInt(2) == 0) { //si no es atracción
+					productos.add(toPromocion(resultados));
+				} else if (resultados.getInt(3) == 0) { //si no es promoción
+					productos.add(toAtraccion(resultados));
+				} 
 			}
 
-			return atracciones;
+			return productos;
 		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
 	}
 
 	private Atraccion toAtraccion(ResultSet resultados) throws SQLException {
-		return new Atraccion(resultados.getInt(1), resultados.getString(2), resultados.getDouble(3), resultados.getDouble(4),
-				resultados.getInt(5), TipoDeAtraccion.valueOf(resultados.getString(6)));
+		AtraccionDAOImpl atraccion = new AtraccionDAOImpl();
+		return atraccion.findById(resultados.getInt(2));
 	}
 
+	private Promocion toPromocion(ResultSet resultados) throws SQLException {
+		PromocionDAOImpl promocion = new PromocionDAOImpl();
+		return promocion.findById(resultados.getInt(2));
+	}
 }

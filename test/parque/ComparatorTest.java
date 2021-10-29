@@ -16,7 +16,7 @@ package parque;
 
 			assertNotNull(comparable);
 		}
-
+		/*
 		@Test
 		public void ordenCorrectoTest() {
 			ComparablePorAtraccionPreferida comparable  = new ComparablePorAtraccionPreferida(TipoDeAtraccion.AVENTURA);
@@ -51,6 +51,6 @@ package parque;
 			ordenEsperado.add(atraccion2);
 			
 			assertEquals(ordenEsperado, ordenObtenido);
-		}
+		}*/
 	}
 

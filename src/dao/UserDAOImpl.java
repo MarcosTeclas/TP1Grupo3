@@ -5,10 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import jdbc.ConnectionProvider;
+import parque.Atraccion;
+import parque.Producto;
 import parque.TipoDeAtraccion;
 import parque.Usuario;
 
@@ -22,8 +23,8 @@ public class UserDAOImpl implements UserDAO {
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setString(1, usuario.getNombre());
 			statement.setString(2, usuario.getAtraccionPreferida().toString());
-			statement.setDouble(3, usuario.getDineroTotal());
-			statement.setDouble(4, usuario.getTiempoTotal());
+			statement.setDouble(3, usuario.getDinero());
+			statement.setDouble(4, usuario.getTiempo());
 			int rows = statement.executeUpdate();
 
 			return rows;
@@ -34,15 +35,13 @@ public class UserDAOImpl implements UserDAO {
 
 	public int update(Usuario usuario) {
 		try {
-			String sql = "UPDATE USUARIOS SET NOMBRE = ?, ATRACCION_PREFERIDA = ?, DINERO = ?, TIEMPO = ? WHERE ID = ?";
+			String sql = "UPDATE USUARIOS SET DINERO_DISPONIBLE = ?, TIEMPO_DISPONIBLE = ? WHERE ID = ?";
 			Connection conn = ConnectionProvider.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, usuario.getNombre());
-			statement.setString(2, usuario.getAtraccionPreferida().toString());
-			statement.setDouble(3, usuario.getDineroTotal());
-			statement.setDouble(4, usuario.getTiempoTotal());
-			statement.setInt(5, usuario.getId());
+			statement.setDouble(1, usuario.getDinero());
+			statement.setDouble(2, usuario.getTiempo());
+			statement.setInt(3, usuario.getId());
 			int rows = statement.executeUpdate();
 
 			return rows;
@@ -121,7 +120,45 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	private Usuario toUser(ResultSet resultados) throws SQLException {		
-		return new Usuario(resultados.getString(2), TipoDeAtraccion.valueOf(resultados.getString(3)), resultados.getDouble(4), resultados.getDouble(5));
+		List<Producto> itinerario = getProductosComprados(resultados.getInt(1));		
+		Usuario usuario = new Usuario(resultados.getInt(1), resultados.getString(2), 
+				TipoDeAtraccion.valueOf(resultados.getString(3)), resultados.getDouble(4), resultados.getDouble(5), itinerario);
+		return usuario;
 	}
+	
+	private List<Producto> getProductosComprados(int idUsuario) {
+		try {
+			String sql = "SELECT PROMOCIONES.ID FROM PROMOCIONES JOIN ITINERARIO_USUARIO ON ITINERARIO_USUARIO.PROMOCION_COMPRADA_ID "
+					+ "= PROMOCIONES.ID WHERE ITINERARIO_USUARIO.USUARIO_ID = ?";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, idUsuario);
+			ResultSet resultados = statement.executeQuery();
 
-}
+			List<Producto> atraccionesIncluidas = new ArrayList<Producto>();
+			PromocionDAOImpl promocionDao = new PromocionDAOImpl();
+
+			while (resultados.next()) {
+				atraccionesIncluidas.add(promocionDao.findById(resultados.getInt(1)));
+			}
+			conn.close();
+			
+			String sql2 = "SELECT ATRACCIONES.ID FROM ATRACCIONES JOIN ITINERARIO_USUARIO ON "
+					+ "ITINERARIO_USUARIO.ATRACCION_COMPRADA_ID = ATRACCIONES.ID WHERE ITINERARIO_USUARIO.USUARIO_ID= ?";
+			Connection conn2 = ConnectionProvider.getConnection();
+			PreparedStatement statement2 = conn2.prepareStatement(sql2);
+			statement2.setInt(1, idUsuario);
+			ResultSet resultados2 = statement2.executeQuery();
+
+			AtraccionDAOImpl atraccionDAO = new AtraccionDAOImpl();
+
+			while (resultados2.next()) {
+				Atraccion atraccion = atraccionDAO.findById(resultados2.getInt(1));
+				atraccionesIncluidas.add(atraccion);
+			}
+			return atraccionesIncluidas;
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+	}
+	}

@@ -7,8 +7,8 @@ public abstract class Promocion extends Producto {
 
 	protected List<Atraccion> atraccionesIncluidas;
 
-	public Promocion(TipoDeAtraccion tipo, String nombre, List<Atraccion> atraccionesIncluidas) {
-		super(nombre, tipo);
+	public Promocion(int id, TipoDeAtraccion tipo, String nombre, List<Atraccion> atraccionesIncluidas) {
+		super(id, nombre, tipo);
 		this.atraccionesIncluidas = atraccionesIncluidas;
 	}
 
@@ -17,7 +17,7 @@ public abstract class Promocion extends Producto {
 		return true;
 	}
 
-	public String promocionesIncluidas() {
+	public String stringAtraccionesIncluidas() {
 		String resultado = "";
 		for (Atraccion atraccion : atraccionesIncluidas) {
 			resultado += atraccion.getNombre() + " ";
@@ -37,16 +37,24 @@ public abstract class Promocion extends Producto {
 	public int getId() {
 		return id;
 	}
+	
+	public List<Atraccion> getAtraccionesIncluidas() {
+		return atraccionesIncluidas;
+	}
+
+	public void setAtraccionesIncluidas(List<Atraccion> atraccionesIncluidas) {
+		this.atraccionesIncluidas = atraccionesIncluidas;
+	}
 
 	@Override
-	public String convertirParaMostrarArchivo() {
-		return "PROMO: " + getNombre() + ". Atracciones incluidas: " + promocionesIncluidas();
+	public String toStringParaMostrar() {
+		return "PROMO: " + getNombre() + ". Atracciones incluidas: " + stringAtraccionesIncluidas();
 	}
 	
 	@Override
 	public String toString() {
 		return "PROMO: " + nombre + ", costo: " + costo + ", tiempo necesario: " + tiempoNecesario 
-				+ ", tipo: " + tipo + ", atracciones Incluidas: " + promocionesIncluidas();
+				+ ", tipo: " + tipo + ", atracciones Incluidas: " + stringAtraccionesIncluidas();
 	}
 
 	public void restarCupo() {
