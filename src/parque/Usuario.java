@@ -1,6 +1,5 @@
 package parque;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -9,10 +8,10 @@ public class Usuario {
 	private int id;
 	private String nombre;
 	private TipoDeAtraccion preferida;
-	private double dinero, tiempo, dineroTotal, tiempoTotal;
+	private double dinero, tiempo;
 	private List<Producto> itinerario;
 
-	public Usuario(String nombre, TipoDeAtraccion preferencia, double dinero, double tiempo) {
+	public Usuario(int id, String nombre, TipoDeAtraccion preferencia, double dinero, double tiempo, List<Producto> itinerario) {
 		if (validaNumeros(dinero)) {
 			this.dinero = dinero;
 		} else {
@@ -23,10 +22,10 @@ public class Usuario {
 		} else {
 			this.tiempo = 0;
 		}
-
+		this.id = id;
 		this.nombre = nombre;
 		this.preferida = preferencia;
-		itinerario = new ArrayList<Producto>();
+		this.itinerario = itinerario;
 	}
 	
 	public int getId() {
@@ -36,13 +35,13 @@ public class Usuario {
 	public String getNombre() {
 		return nombre;
 	}
-
-	public double getDineroTotal() {
-		return dineroTotal;
+	
+	public double getDinero() {
+		return dinero;
 	}
-
-	public double getTiempoTotal() {
-		return tiempoTotal;
+	
+	public double getTiempo() {
+		return tiempo;
 	}
 
 	public TipoDeAtraccion getAtraccionPreferida() {
@@ -71,9 +70,7 @@ public class Usuario {
 
 	public void comprarProducto(Producto producto) {
 		this.dinero -= producto.getCosto();
-		this.dineroTotal += producto.getCosto();
 		this.tiempo -= producto.getTiempoNecesario();
-		this.tiempoTotal += producto.getTiempoNecesario();
 		this.itinerario.add(producto);
 		producto.restarCupo();
 	}
@@ -87,7 +84,6 @@ public class Usuario {
 		return existe;
 	}
 	
-
 
 	@Override
 	public String toString() {

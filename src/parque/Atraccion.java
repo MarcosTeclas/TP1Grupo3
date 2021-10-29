@@ -8,8 +8,8 @@ public class Atraccion extends Producto{
 		super();
 	}
 
-	public Atraccion(String nombre, double costo,double tiempoNecesario, int cupoPersonas, TipoDeAtraccion tipo) {
-		super(nombre, costo, tiempoNecesario, cupoPersonas, tipo);
+	public Atraccion(int id, String nombre, double costo,double tiempoNecesario, int cupoPersonas, TipoDeAtraccion tipo) {
+		super(id, nombre, costo, tiempoNecesario, cupoPersonas, tipo);
 	}
 
 	public boolean quedaCupo() {
@@ -58,7 +58,7 @@ public class Atraccion extends Producto{
 	}
 
 	@Override
-	public String convertirParaMostrarArchivo() {
+	public String toStringParaMostrar() {
 		return "ATRACCIÓN: " + getNombre();
 	}
 
