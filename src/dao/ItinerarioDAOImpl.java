@@ -17,8 +17,7 @@ public class ItinerarioDAOImpl implements ItinerarioDAO {
 
 	public int insert(Producto producto, Usuario usuario) {
 		try {
-			String sql = "INSERT INTO ITINERARIO_USUARIO (USUARIO_ID, ATRACCION_COMPRADA_ID, PROMOCION_COMPRADA_ID)"
-					+ " VALUES (?, ?, ?)";
+			String sql = "INSERT INTO ITINERARIO_USUARIO (USUARIO_ID, ATRACCION_COMPRADA_ID, PROMOCION_COMPRADA_ID) VALUES (?, ?, ?)";
 			Connection conn = ConnectionProvider.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(sql);
@@ -39,15 +38,15 @@ public class ItinerarioDAOImpl implements ItinerarioDAO {
 
 	public int update(Producto producto, Usuario usuario) {
 		try {
-			String sql = "UPDATE ITINERARIO_USUARIO SET USUARIO_ID = ?, ATRACCION_COMPRADA_ID = ?, PROMOCION_COMPRADA_ID = ?";
+			String sql = "UPDATE ITINERARIO_USUARIO SET ATRACCION_COMPRADA_ID = ?, PROMOCION_COMPRADA_ID = ? WHERE USUARIO_ID = ?";
 			Connection conn = ConnectionProvider.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setInt(1, usuario.getId());
+			statement.setInt(2, usuario.getId());
 			if (producto.esPromo()) {
-				statement.setInt(3, producto.getId());
-			} else {
 				statement.setInt(2, producto.getId());
+			} else {
+				statement.setInt(3, producto.getId());
 			}
 			int rows = statement.executeUpdate();
 
