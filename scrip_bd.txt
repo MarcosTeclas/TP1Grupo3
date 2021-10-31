@@ -1,0 +1,80 @@
+CREATE TABLE "atracciones" (
+	"id"	INTEGER NOT NULL,
+	"nombre"	TEXT NOT NULL,
+	"costo"	REAL NOT NULL,
+	"tiempo_necesario"	REAL NOT NULL,
+	"cupo"	INTEGER NOT NULL,
+	"tipo_atraccion"	TEXT NOT NULL,
+	FOREIGN KEY("tipo_atraccion") REFERENCES "tipo_atraccion"("nombre"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+CREATE TABLE "atracciones_promociones" (
+	"id"	INTEGER NOT NULL,
+	"atraccion_id"	INTEGER NOT NULL,
+	"promocion_id"	INTEGER NOT NULL,
+	FOREIGN KEY("atraccion_id") REFERENCES "atracciones"("id"),
+	FOREIGN KEY("promocion_id") REFERENCES "promociones"("id"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+CREATE TABLE "promociones" (
+	"id"	INTEGER NOT NULL,
+	"nombre"	TEXT NOT NULL,
+	"tipo_atraccion"	TEXT NOT NULL,
+	"costo"	REAL,
+	"atraccion_gratuita_id"	INTEGER,
+	"descuento"	REAL,
+	FOREIGN KEY("tipo_atraccion") REFERENCES "tipo_atraccion"("nombre"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+CREATE TABLE "tipo_atraccion" (
+	"id"	INTEGER NOT NULL,
+	"nombre"	TEXT NOT NULL UNIQUE,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+CREATE TABLE "usuarios" (
+	"id"	INTEGER NOT NULL,
+	"nombre"	TEXT NOT NULL,
+	"atraccion_preferida"	TEXT NOT NULL,
+	"dinero_disponible"	REAL NOT NULL,
+	"tiempo_disponible"	REAL NOT NULL,
+	FOREIGN KEY("atraccion_preferida") REFERENCES "tipo_atraccion"("nombre"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+
+INSERT INTO "promociones" ("nombre","tipo_atraccion","costo","atraccion_gratuita_id","descuento") VALUES
+
+("Pack Aventura","AVENTURA",NULL,NULL,20.0),
+("Pack Degustacion","DEGUSTACION",36.0,NULL,NULL),
+("Pack Paisaje","PAISAJE",NULL,7,NULL);
+
+
+INSERT INTO "usuarios" ("nombre","atraccion_preferida","dinero_disponible","tiempo_disponible") VALUES
+
+("Gandalf","PAISAJE",100.0,80.0)
+("Eowyn","AVENTURA",100.0,80.0)
+("Sam","DEGUSTACION",36.0,80.0)
+("Galadriel","PAISAJE",120.0,60.0) ;
+
+
+INSERT INTO "atracciones" ("nombre","costo","tiempo_necesario","cupo","tipo_atraccion") VALUES
+("Moria",10.0,2.0,6,"AVENTURA"),
+("Minas Tirith",5.0,2.5,25,PAISAJE),
+("La Comarca",3.0,6.5,150,DEGUSTACION),
+("Mordor",25.0,3.0,4,AVENTURA),
+("Abismo de Helm",5.0,2.0,15,PAISAJE),
+("Lothloriem",35.0,1.0,30,DEGUSTACION),
+("Erebor",12.0,3.0,32,PAISAJE),
+("Bosque Negro",3.0,4.0,12,AVENTURA),
+("Chocobo Amarillo",2.0,5.0,50,DEGUSTACION),
+("Far Far Away",15.0,2.0,5,AVENTURA),
+("Aragon",21.0,4.0,35,PAISAJE),
+("Elarrabal",3.0,5.0,200,DEGUSTACION),
+("El Cid",27.0,6.0,4,AVENTURA),
+("Allende",35.0,5.0,7,AVENTURA),
+("Shurima",25.0,3.0,35,PAISAJE),
+("AguasTurbias",2.0,3.0,50,DEGUSTACION) ;
